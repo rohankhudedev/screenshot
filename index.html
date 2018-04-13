@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="https://github.com/niklasvh/html2canvas/releases/download/0.4.1/html2canvas.js"></script>
+        <!--<script type="text/javascript" src="http://cdn.jsdelivr.net/g/filesaver.js"></script>-->
+        <script type="text/javascript">
+            $( window ).load( function() {
+
+                $( function() {
+                    $( "#btnSave" ).click( function() {
+                        html2canvas( $( "#widget" ), {
+                            onrendered: function( canvas ) {
+                                theCanvas = canvas;
+                                document.body.appendChild( canvas );
+                                canvas.toBlob( function( blob ) {
+//                                    console.log(blob);
+//                                    saveAs( blob, "Dashboard.png" );
+                                    var dataURL = canvas.toDataURL();
+                                    $.ajax( {
+                                        type: "POST",
+                                        url: "script.php",
+                                        data: {
+                                            img : dataURL
+                                        }
+                                    } ).done( function( o ) {
+                                        console.log( 'saved' );
+                                        // If you want the file to be visible in the browser 
+                                        // - please modify the callback in javascript. All you
+                                        // need is to return the url to the file, you just saved 
+                                        // and than put the image in your browser.
+                                    } );
+                                } );
+                            }
+                        } );
+                    } );
+                } );
+
+
+            } );
+        </script>
+    </head>
+    <body>
+        <div id="widget">
+            hi rohan
+        </div>
+        <input type="button" id="btnSave" value="Save PNG"/>
+    </body>
+</html>
+
+
